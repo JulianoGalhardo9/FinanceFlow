@@ -1,0 +1,15 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: financeflow-db
+    environment:
+      ACCEPT_EULA: "1"
+      MSSQL_SA_PASSWORD: "Finance@2025"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+volumes:
+  sqlserver_data:
+    driver: local
