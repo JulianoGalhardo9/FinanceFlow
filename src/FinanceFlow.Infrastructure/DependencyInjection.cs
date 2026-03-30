@@ -15,6 +15,8 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AppDbContext>());
 
         services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 
