@@ -1,6 +1,9 @@
 using System.Text;
 using FinanceFlow.API.Middleware;
+using FinanceFlow.Application.Common.Behaviors;
 using FinanceFlow.Infrastructure;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -80,6 +83,10 @@ try
                     Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
             };
         });
+    
+    builder.Services.AddValidatorsFromAssembly(typeof(FinanceFlow.Application.Commands.CreatePortfolio.CreatePortfolioHandler).Assembly);
+
+    builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
     builder.Services.AddAuthorization();
 

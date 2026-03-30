@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using FluentValidation;
 
 namespace FinanceFlow.API.Middleware;
 
@@ -51,6 +52,11 @@ public class ExceptionHandlingMiddleware
             case KeyNotFoundException:
                 statusCode = (int)HttpStatusCode.NotFound;
                 message = exception.Message;
+                break;
+            
+            case ValidationException validationException:
+                statusCode = (int)HttpStatusCode.BadRequest;
+                message = string.Join(" ", validationException.Errors.Select(e => e.ErrorMessage));
                 break;
 
             default:
