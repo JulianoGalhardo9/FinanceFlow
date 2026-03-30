@@ -12,7 +12,7 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Portfolio> Portfolios => Set<Portfolio>();
     public DbSet<Asset> Assets => Set<Asset>();
 
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await base.SaveChangesAsync(cancellationToken);
     }
