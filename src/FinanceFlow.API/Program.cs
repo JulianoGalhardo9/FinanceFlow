@@ -1,3 +1,4 @@
+using FinanceFlow.API.Middleware;
 using FinanceFlow.Infrastructure;
 using MediatR;
 using Serilog;
@@ -38,6 +39,8 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
 
     app.UseHttpsRedirection();
     app.UseSerilogRequestLogging();
