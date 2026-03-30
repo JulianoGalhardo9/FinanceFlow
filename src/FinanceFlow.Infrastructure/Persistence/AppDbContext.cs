@@ -3,6 +3,7 @@ using FinanceFlow.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceFlow.Infrastructure.Persistence;
+
 public class AppDbContext : DbContext, IUnitOfWork
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -11,6 +12,7 @@ public class AppDbContext : DbContext, IUnitOfWork
 
     public DbSet<Portfolio> Portfolios => Set<Portfolio>();
     public DbSet<Asset> Assets => Set<Asset>();
+    public DbSet<User> Users => Set<User>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
