@@ -59,4 +59,14 @@ public class Portfolio
             .Select(a => a.TotalInvested())
             .Aggregate((total, next) => total.Add(next));
     }
+
+    public void RemoveAsset(Guid assetId)
+{
+    var asset = _assets.FirstOrDefault(a => a.Id == assetId);
+    
+    if (asset is null)
+        throw new InvalidOperationException("Ativo não encontrado para remoção.");
+
+    _assets.Remove(asset);
+}
 }

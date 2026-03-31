@@ -2,6 +2,7 @@ using System.Security.Claims;
 using FinanceFlow.Application.Commands.AddAsset;
 using FinanceFlow.Application.Commands.CreatePortfolio;
 using FinanceFlow.Application.Commands.DeletePortfolio;
+using FinanceFlow.Application.Commands.RemoveAsset;
 using FinanceFlow.Application.Queries.GetPortfolio;
 using FinanceFlow.Application.Queries.GetPortfolios;
 using MediatR;
@@ -103,6 +104,20 @@ public class PortfolioController : ControllerBase
         await _sender.Send(command, cancellationToken);
 
         return NoContent();
+    }
+
+    // Remove um assets da carteira
+    [HttpDelete("{portfolioId}/assets/{assetId}")]
+    public async Task<IActionResult> RemoveAsset(
+        [FromRoute] Guid portfolioId, 
+        [FromRoute] Guid assetId, 
+        CancellationToken cancellationToken)
+    {
+        var command = new RemoveAssetCommand(portfolioId, assetId, GetCurrentUserId());
+        
+        await _sender.Send(command, cancellationToken);
+
+        return NoContent(); // HTTP 204
     }
 }
 public record CreatePortfolioRequest(string Name);
