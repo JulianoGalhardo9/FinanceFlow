@@ -4,6 +4,7 @@ using FinanceFlow.Application.Commands.CreatePortfolio;
 using FinanceFlow.Application.Commands.DeletePortfolio;
 using FinanceFlow.Application.Commands.RemoveAsset;
 using FinanceFlow.Application.Queries.GetPortfolio;
+using FinanceFlow.Application.Queries.GetPortfolioReport;
 using FinanceFlow.Application.Queries.GetPortfolios;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -52,6 +53,15 @@ public class PortfolioController : ControllerBase
             return NotFound(new { message = $"Carteira {id} não encontrada." });
 
         return Ok(portfolio);
+    }
+
+    // GET /api/portfolios/{id}/report
+    [HttpGet("{id}/report")]
+    public async Task<IActionResult> GetReport([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetPortfolioReportQuery(id, GetCurrentUserId());
+        var report = await _sender.Send(query, cancellationToken);
+        return Ok(report);
     }
 
     // Cria uma nova carteira para o usuário logado
