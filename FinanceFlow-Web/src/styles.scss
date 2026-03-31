@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
+// Estilo Global de Banco Digital
 body {
-  background-color: #f8fafc; /* slate-50 */
-  color: #0f172a; /* slate-900 */
+  @theme {
+    --color-primary: #0066ff;
+  }
+  background-color: #f8fafc;
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', sans-serif;
 }

@@ -1,11 +1,36 @@
-<div class="min-h-screen flex items-center justify-center bg-blue-600">
-  <div class="bg-white p-8 rounded-xl shadow-2xl text-center">
-    <h1 class="text-3xl font-bold text-blue-600 mb-2">FinanceFlow</h1>
-    <p class="text-slate-600">O motor do seu patrimônio está pronto!</p>
-    <div class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg font-medium inline-block">
-      Tailwind Ativo 🚀
+<div class="h-screen w-full flex flex-col items-center justify-center bg-slate-900 text-white font-sans">
+  
+  <div class="p-10 bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl text-center max-w-md mx-4">
+    
+    <h1 class="text-4xl font-extrabold text-blue-500 mb-4 tracking-tight">
+      FinanceFlow <span class="text-white">Web</span>
+    </h1>
+    
+    <p class="text-slate-400 mb-8 leading-relaxed">
+      A interface do seu sistema de gestão de ativos está configurada com 
+      <span class="text-blue-400 font-semibold">Angular 18</span> e 
+      <span class="text-cyan-400 font-semibold">Tailwind 4</span>.
+    </p>
+
+    <div class="flex flex-col items-center gap-4">
+      <div class="px-6 py-2 bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-full cursor-default inline-flex items-center gap-2 font-bold shadow-lg shadow-blue-900/20">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+        </span>
+        Sistema Operacional 🚀
+      </div>
+      
+      <p class="text-xs text-slate-500 uppercase tracking-widest font-medium">
+        Pronto para conectar ao Backend .NET 9
+      </p>
     </div>
   </div>
+
+  <footer class="absolute bottom-6 text-slate-600 text-sm">
+    &copy; 2026 FinanceFlow Ecosystem
+  </footer>
+
 </div>
 
 <router-outlet />
