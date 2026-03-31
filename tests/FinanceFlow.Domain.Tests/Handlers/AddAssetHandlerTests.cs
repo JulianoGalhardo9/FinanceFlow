@@ -3,6 +3,7 @@ using FinanceFlow.Domain.Entities;
 using FinanceFlow.Domain.Repositories;
 using FluentAssertions;
 using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace FinanceFlow.Domain.Tests.Handlers;
 
@@ -10,13 +11,15 @@ public class AddAssetHandlerTests
 {
     private readonly Mock<IPortfolioRepository> _repositoryMock;
     private readonly Mock<IUnitOfWork> _uowMock;
+    private readonly Mock<ILogger<AddAssetHandler>> _loggerMock;
     private readonly AddAssetHandler _handler;
 
     public AddAssetHandlerTests()
     {
         _repositoryMock = new Mock<IPortfolioRepository>();
         _uowMock = new Mock<IUnitOfWork>();
-        _handler = new AddAssetHandler(_repositoryMock.Object, _uowMock.Object);
+        _loggerMock = new Mock<ILogger<AddAssetHandler>>();
+        _handler = new AddAssetHandler(_repositoryMock.Object, _uowMock.Object, _loggerMock.Object);
     }
 
     [Fact]

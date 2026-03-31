@@ -18,13 +18,19 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
+    // ... dentro do bloco try, no builder.Host.UseSerilog ...
     builder.Host.UseSerilog((context, services, configuration) =>
     {
-        configuration
-            .ReadFrom.Configuration(context.Configuration)
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            .WriteTo.Console();
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        // Adiciona informações úteis automaticamente em cada log
+        .Enrich.WithProperty("Application", "FinanceFlow.API") 
+        .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+        .WriteTo.File("logs/log-.txt", 
+            rollingInterval: RollingInterval.Day, // Cria um arquivo novo por dia
+            retainedFileCountLimit: 7); // Mantém apenas os últimos 7 dias
     });
 
     builder.Services.AddControllers();
