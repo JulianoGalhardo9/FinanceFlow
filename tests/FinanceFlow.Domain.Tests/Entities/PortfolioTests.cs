@@ -37,5 +37,6 @@ public class PortfolioTests
         // Assert
         action.Should().Throw<InvalidOperationException>()
             .WithMessage("*já existe*");
+            
     }
 }

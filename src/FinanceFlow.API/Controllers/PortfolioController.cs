@@ -83,6 +83,7 @@ public class PortfolioController : ControllerBase
     {
         var command = new AddAssetCommand(
             PortfolioId: id,
+            UserId: GetCurrentUserId(),
             Ticker: request.Ticker,
             Quantity: request.Quantity,
             PurchasePrice: request.PurchasePrice,

@@ -21,6 +21,10 @@ public class AddAssetHandler : IRequestHandler<AddAssetCommand, Guid>
         if (portfolio is null)
             throw new InvalidOperationException($"Carteira com ID {request.PortfolioId} não encontrada.");
 
+        // Segurança: Verificamos se o usuário que está tentando adicionar o ativo é o dono da carteira
+        if (portfolio.UserId != request.UserId)
+        throw new InvalidOperationException("Você não tem permissão para alterar esta carteira.");
+
         var purchasePrice = new Money(request.PurchasePrice, request.Currency);
 
         var asset = portfolio.AddAsset(request.Ticker, request.Quantity, purchasePrice);

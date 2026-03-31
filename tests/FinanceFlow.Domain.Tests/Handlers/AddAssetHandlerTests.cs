@@ -14,36 +14,57 @@ public class AddAssetHandlerTests
 
     public AddAssetHandlerTests()
     {
-        // Criamos as "versões de mentira" das dependências
         _repositoryMock = new Mock<IPortfolioRepository>();
         _uowMock = new Mock<IUnitOfWork>();
-        
-        // Injetamos os Mocks no Handler real
         _handler = new AddAssetHandler(_repositoryMock.Object, _uowMock.Object);
+    }
+
+    [Fact]
+    public async Task Should_Throw_Exception_When_Portfolio_Does_Not_Exist()
+    {
+    // Arrange: Configuramos o banco para retornar NULL (não existe)
+    _repositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                   .ReturnsAsync((Portfolio?)null);
+
+    var command = new AddAssetCommand(Guid.NewGuid(), Guid.NewGuid(), "PETR4", 10, 30, "BRL");
+
+    // Act: Executamos o Handler
+    Func<Task> action = async () => await _handler.Handle(command, CancellationToken.None);
+
+    // Assert:
+    await action.Should().ThrowAsync<InvalidOperationException>()
+        .WithMessage("*não encontrada*");
     }
 
     [Fact]
     public async Task Should_Throw_Exception_When_User_Is_Not_Owner()
     {
-        // Arrange
+        // Arrange: Criamos um dono e um intruso
         var ownerId = Guid.NewGuid();
         var intruderId = Guid.NewGuid();
         var portfolioId = Guid.NewGuid();
-
+        
+        // A carteira pertence ao OWNER
         var portfolio = Portfolio.Create(ownerId, "Carteira do Dono");
 
-        // Configuramos o Mock: "Quando o repositório for chamado com esse ID, retorne esta carteira"
         _repositoryMock.Setup(x => x.GetByIdAsync(portfolioId, It.IsAny<CancellationToken>()))
                        .ReturnsAsync(portfolio);
 
-        // Criamos o comando vindo de um usuário intruso
-        var command = new AddAssetCommand(portfolioId, "PETR4", 10, 30, "BRL");
+        // Comando enviado pelo INTRUSO
+        var command = new AddAssetCommand(portfolioId, intruderId, "PETR4", 10, 30, "BRL");
+
+        // Act
+        Func<Task> action = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert: Deve estourar erro de permissão
+        await action.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("Você não tem permissão para alterar esta carteira.");
     }
 
     [Fact]
-    public async Task Should_Call_Repository_And_Commit_When_Data_Is_Valid()
+    public async Task Should_Add_Asset_Correctly_When_Request_Is_Valid()
     {
-        // Arrange
+        // Arrange: Tudo correto
         var userId = Guid.NewGuid();
         var portfolioId = Guid.NewGuid();
         var portfolio = Portfolio.Create(userId, "Minha Carteira");
@@ -51,16 +72,14 @@ public class AddAssetHandlerTests
         _repositoryMock.Setup(x => x.GetByIdAsync(portfolioId, It.IsAny<CancellationToken>()))
                        .ReturnsAsync(portfolio);
 
-        var command = new AddAssetCommand(portfolioId, "VALE3", 5, 90, "BRL");
+        var command = new AddAssetCommand(portfolioId, userId, "VALE3", 5, 90, "BRL");
 
         // Act
-        await _handler.Handle(command, CancellationToken.None);
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        // Verificamos se o método SaveChanges foi chamado exatamente UMA vez
+        // Assert: Verificamos se salvou no banco e gerou um ID
+        result.Should().NotBeEmpty();
         _uowMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        
-        // Verificamos se o ativo foi realmente inserido na lista do objeto portfolio
         portfolio.Assets.Should().HaveCount(1);
         portfolio.Assets.First().Ticker.Should().Be("VALE3");
     }
