@@ -18,28 +18,34 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
-    // ... dentro do bloco try, no builder.Host.UseSerilog ...
     builder.Host.UseSerilog((context, services, configuration) =>
     {
-    configuration
-        .ReadFrom.Configuration(context.Configuration)
-        .ReadFrom.Services(services)
-        .Enrich.FromLogContext()
-        // Adiciona informações úteis automaticamente em cada log
-        .Enrich.WithProperty("Application", "FinanceFlow.API") 
-        .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-        .WriteTo.File("logs/log-.txt", 
-            rollingInterval: RollingInterval.Day, // Cria um arquivo novo por dia
-            retainedFileCountLimit: 7); // Mantém apenas os últimos 7 dias
+        configuration
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services)
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("Application", "FinanceFlow.API") 
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+            .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7);
     });
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
 
+    // 1. ADICIONADO AQUI: Configuração da Política de CORS
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AngularPolicy", policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+    });
+
     builder.Services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new() { Title = "FinanceFlow API", Version = "v1" });
-
         c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
             Description = "Digite o token JWT assim: Bearer {seu_token}",
@@ -48,17 +54,12 @@ try
             Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
             Scheme = "Bearer"
         });
-
         c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
         {
             {
                 new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
-                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                    {
-                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference { Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme, Id = "Bearer" }
                 },
                 Array.Empty<string>()
             }
@@ -66,8 +67,7 @@ try
     });
 
     builder.Services.AddMediatR(cfg =>
-        cfg.RegisterServicesFromAssembly(
-            typeof(FinanceFlow.Application.Commands.CreatePortfolio.CreatePortfolioHandler).Assembly));
+        cfg.RegisterServicesFromAssembly(typeof(FinanceFlow.Application.Commands.CreatePortfolio.CreatePortfolioHandler).Assembly));
 
     builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -78,26 +78,22 @@ try
             {
                 ValidateIssuer = true,
                 ValidIssuer = builder.Configuration["Jwt:Issuer"],
-
                 ValidateAudience = true,
                 ValidAudience = builder.Configuration["Jwt:Audience"],
-
                 ValidateLifetime = true,
-
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
             };
         });
     
     builder.Services.AddValidatorsFromAssembly(typeof(FinanceFlow.Application.Commands.CreatePortfolio.CreatePortfolioHandler).Assembly);
-
     builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
     builder.Services.AddAuthorization();
 
+    // --- CONSTRUÇÃO DO APP (Acontece UMA vez) ---
     var app = builder.Build();
 
+    // --- CONFIGURAÇÃO DO PIPELINE (Middlewares) ---
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
@@ -105,6 +101,8 @@ try
     }
 
     app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+    app.UseCors("AngularPolicy");
 
     app.UseHttpsRedirection();
     app.UseSerilogRequestLogging();
@@ -125,4 +123,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
 public partial class Program { }

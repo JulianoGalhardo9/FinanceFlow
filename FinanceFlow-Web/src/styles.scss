@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
-// Estilo Global de Banco Digital
-body {
-  @theme {
-    --color-primary: #0066ff;
-  }
-  background-color: #f8fafc;
+/* Tente este caminho que sobe dois níveis para pegar a pasta src inteira */
+@source "../../src/**/*.{html,ts}";
+
+/* Força o layout a ocupar a tela enquanto o Tailwind não aplica as classes */
+:host, html, body {
+  display: block;
+  height: 100%;
+  width: 100%;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  background-color: #0f172a;
 }

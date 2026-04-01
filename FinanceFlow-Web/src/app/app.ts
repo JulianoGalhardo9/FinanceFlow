@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router'; // 1. Importar o símbolo
+import { Component, ViewEncapsulation } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet], // 2. Adicionar aqui para o HTML reconhecer
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
+  encapsulation: ViewEncapsulation.None // ADICIONE ESTA LINHA
 })
-export class AppComponent {
-  title = 'FinanceFlow-Web';
-}
+export class AppComponent {}
