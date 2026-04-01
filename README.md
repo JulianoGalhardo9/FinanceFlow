@@ -1,80 +1,79 @@
-# 🚀 FinanceFlow — Sistema de Gestão de Ativos e Portfólios (.NET 9, Angular 18 & SQL Server)
+# 🚀 FinanceFlow — Sistema de Gestão de Ativos (.NET 9, Angular 18 & SQL Server)
 
 ---
 
 ## 🧭 Visão Geral
 
-O **FinanceFlow** é uma plataforma Full Stack robusta projetada para o controle e monitoramento de carteiras de investimentos. A aplicação permite que usuários gerenciem múltiplos portfólios e acompanhem seus ativos financeiros (como ações e FIIs) de forma centralizada e segura.
+O **FinanceFlow** é uma plataforma Full Stack de nível empresarial projetada para o controle e monitoramento de carteiras de investimentos. O sistema permite a gestão de múltiplos portfólios, rastreamento de ativos e análise de patrimônio em tempo real.
 
-Desenvolvido com as tecnologias mais recentes do mercado, o projeto utiliza **.NET 9** no back-end e **Angular 18** no front-end, focando em performance, segurança via **JWT** e uma experiência de usuário fluida com **Signals**.
+O projeto foi construído seguindo rigorosos padrões de engenharia de software, incluindo **Clean Architecture**, **Test-Driven Development (TDD)** e os princípios **SOLID**, garantindo uma base de código sustentável e escalável.
 
 ---
 
 ## ⚙️ Funcionalidades e Arquitetura
 
-### 🏗️ 1. Arquitetura Profissional & Clean Code
-* **Back-end:** API REST desenvolvida em C# utilizando .NET 9, estruturada para suportar operações assíncronas e alta escalabilidade.
-* **Front-end:** SPA (Single Page Application) com Angular 18, adotando a nova sintaxe de *Control Flow* e o gerenciamento de estado reativo com **Signals**.
-* **Segurança:** Sistema de Login e Registro com proteção de rotas via **Auth Guards** e persistência de sessão segura.
+### 🏗️ 1. Arquitetura e Injeção de Dependência (DI)
+* **Arquitetura em Camadas:** Separação clara entre *Domain*, *Application*, *Infrastructure* e *API*.
+* **Injeção de Dependência:** Uso nativo do DI do .NET para desacoplamento de serviços, facilitando a manutenção e a substituição de componentes (ex: troca de provedores de dados ou serviços de e-mail).
+* **Singleton & Scoped:** Gerenciamento inteligente do ciclo de vida de objetos para otimização de memória e performance.
 
 ---
 
-### 🔐 2. Autenticação e Autorização (JWT)
-* **Identity Management:** Fluxo completo de cadastro de novos usuários e login validado pelo servidor.
-* **Bearer Tokens:** Implementação de tokens JWT para proteger endpoints sensíveis de portfólios e ativos.
-* **Interceptação Dinâmica:** Configuração de interceptors no front-end para injeção automática de credenciais em todas as requisições HTTP.
+### 🧪 2. Qualidade de Software e Testes
+* **Testes Unitários (xUnit):** Cobertura de lógica de negócio e serviços de domínio, garantindo que as regras financeiras sejam respeitadas.
+* **Mocking (Moq/NSubstitute):** Isolamento de dependências externas para testes rápidos e determinísticos.
+* **Fluent Assertions:** Escrita de testes legíveis que servem como documentação viva do comportamento do sistema.
 
 ---
 
-### 📊 3. Dashboard Financeiro & UX
-* **Interface Premium:** Design Dark Mode moderno, focado na legibilidade de dados e usabilidade do investidor.
-* **Master-Detail Flow:** Navegação dinâmica entre a listagem de carteiras e a visualização detalhada de ativos específicos.
-* **Interatividade:** Adição de ativos em tempo real através de modais integrados e feedback instantâneo de operações.
+### 🔐 3. Autenticação e Segurança (JWT)
+* **Identity & JWT:** Fluxo completo de autenticação com emissão de tokens assinados e expiração configurável.
+* **Auth Guards (Angular):** Proteção de rotas no front-end, impedindo o acesso de usuários não autenticados a áreas sensíveis.
+* **Policy-Based Authorization:** Controle de acesso granular no back-end baseado em claims de usuário.
 
 ---
 
-### 🛠️ 4. Persistência e Modelagem de Dados
-* **Entity Framework Core:** Uso de ORM para mapear relacionamentos complexos (1:N) entre Usuários, Portfólios e seus respectivos Ativos.
-* **SQL Server:** Banco de dados relacional de alto nível para garantir a persistência íntegra de dados críticos.
-* **Eager Loading:** Consultas otimizadas utilizando `.Include()` para garantir que todos os dados relacionados sejam carregados de forma eficiente.
+### 📊 4. Front-end Reativo com Angular 18
+* **Signals & Control Flow:** Implementação das novas APIs do Angular 18 para detecção de mudanças ultra-eficiente.
+* **Master-Detail Pattern:** Navegação fluida entre dashboard geral e detalhes específicos de ativos por portfólio.
+* **Interceptors:** Centralização da lógica de autenticação HTTP, anexando automaticamente tokens Bearer em cada request.
 
 ---
 
-### 🌐 5. Comunicação e Documentação
-* **Swagger UI:** Documentação interativa da API (OpenAPI) que facilita o teste de endpoints e a integração entre as camadas.
-* **CORS Policy:** Políticas de acesso rigorosas para garantir a comunicação segura entre o domínio do Angular e a API .NET.
-* **Services Layer:** Front-end baseado em serviços desacoplados (`Injectable Services`), facilitando a manutenção e a testabilidade do código.
+### 🛠️ 5. Persistência e Infraestrutura
+* **Entity Framework Core 9:** Uso de Migrations para versionamento de banco de dados e Fluent API para configurações complexas de esquema.
+* **SQL Server:** Armazenamento relacional robusto com integridade referencial garantida.
+* **Repository Pattern:** Abstração da camada de dados para facilitar testes e manter a lógica de persistência isolada.
 
 ---
 
 ## 🧰 Tecnologias Utilizadas
 
 ### **Back-end**
-* **C# / .NET 9** (Última versão LTS)
+* **C# / .NET 9** (Runtime)
+* **xUnit & Moq** (Testing Stack)
 * **Entity Framework Core** (ORM)
 * **SQL Server** (Database)
-* **JWT (JSON Web Tokens)** (Segurança)
-* **Swagger / UI** (Documentação)
+* **Swagger / OpenAPI** (API Documentation)
 
 ### **Front-end**
-* **Angular 18** (Control Flow & Signals)
-* **TypeScript** (Tipagem Estrita)
-* **Tailwind CSS** (Estilização Responsiva)
-* **RxJS** (Programação Reativa)
+* **Angular 18** (Framework)
+* **TypeScript** (Language)
+* **Tailwind CSS** (Styling)
+* **RxJS** (Reactive Streams)
 
 ---
 
 ## 🧠 Conceitos Principais Dominados
 
-* Desenvolvimento **Full Stack** de ponta a ponta (API + SPA).
-* Implementação de segurança **JWT** robusta no ecossistema .NET.
-* Modelagem de dados e migrations com **Entity Framework Core**.
-* Gerenciamento de rotas e parâmetros dinâmicos no **Angular Router**.
-* Arquitetura de software orientada a serviços e responsabilidades claras.
-* Consumo e estruturação de APIs RESTful profissionais.
+* **Injeção de Dependência:** Configuração e resolução de dependências complexas no `Program.cs`.
+* **Clean Architecture:** Organização de código focada em domínio e independência de frameworks.
+* **TDD / Unit Testing:** Garantia de qualidade e prevenção de regressões em sistemas financeiros.
+* **Full Stack Integration:** Sincronia perfeita entre modelos C# e interfaces TypeScript.
+* **SQL Server Modeling:** Design de tabelas, relacionamentos 1:N e otimização de queries.
 
 ---
 
 ## 🏁 Conclusão
 
-O **FinanceFlow** reflete o domínio técnico de ferramentas de nível empresarial para o setor financeiro. Unindo o processamento eficiente do .NET 9 com a reatividade do Angular 18, o projeto entrega uma solução pronta para os desafios de escalabilidade e segurança exigidos no desenvolvimento de software moderno.
+O **FinanceFlow** não é apenas um CRUD, mas um ecossistema financeiro completo que demonstra o domínio de tecnologias modernas e boas práticas de desenvolvimento. Desde a infraestrutura de testes até a reatividade do Angular 18, o projeto está pronto para ambientes de produção que exigem segurança, performance e código de alta qualidade.
