@@ -1,49 +1,58 @@
-# 🚀 FinanceFlow — Sistema de Gestão de Ativos (.NET 9, Angular 18 & SQL Server)
+# 🚀 FinanceFlow — Ecossistema Full Stack de Gestão de Ativos (.NET 9, Angular 18 & SQL Server)
 
 ---
 
 ## 🧭 Visão Geral
 
-O **FinanceFlow** é uma plataforma Full Stack de nível empresarial projetada para o controle e monitoramento de carteiras de investimentos. O sistema permite a gestão de múltiplos portfólios, rastreamento de ativos e análise de patrimônio em tempo real.
+O **FinanceFlow** é uma plataforma de alta performance para controle de investimentos, permitindo a gestão de múltiplos portfólios e ativos financeiros. O projeto foi concebido sob a ótica de sistemas críticos, priorizando **segurança**, **testabilidade** e **rastreabilidade**.
 
-O projeto foi construído seguindo rigorosos padrões de engenharia de software, incluindo **Clean Architecture**, **Test-Driven Development (TDD)** e os princípios **SOLID**, garantindo uma base de código sustentável e escalável.
-
----
-
-## ⚙️ Funcionalidades e Arquitetura
-
-### 🏗️ 1. Arquitetura e Injeção de Dependência (DI)
-* **Arquitetura em Camadas:** Separação clara entre *Domain*, *Application*, *Infrastructure* e *API*.
-* **Injeção de Dependência:** Uso nativo do DI do .NET para desacoplamento de serviços, facilitando a manutenção e a substituição de componentes (ex: troca de provedores de dados ou serviços de e-mail).
-* **Singleton & Scoped:** Gerenciamento inteligente do ciclo de vida de objetos para otimização de memória e performance.
+A arquitetura segue os padrões de **Clean Architecture** e **SOLID**, garantindo que a lógica de negócio esteja isolada de preocupações de infraestrutura, facilitando a evolução tecnológica e a manutenção a longo prazo.
 
 ---
 
-### 🧪 2. Qualidade de Software e Testes
-* **Testes Unitários (xUnit):** Cobertura de lógica de negócio e serviços de domínio, garantindo que as regras financeiras sejam respeitadas.
-* **Mocking (Moq/NSubstitute):** Isolamento de dependências externas para testes rápidos e determinísticos.
-* **Fluent Assertions:** Escrita de testes legíveis que servem como documentação viva do comportamento do sistema.
+## ⚙️ Funcionalidades e Engenharia de Software
+
+### 🏗️ 1. Injeção de Dependência & Ciclo de Vida
+* **DI Nativa (Microsoft.Extensions.DependencyInjection):** Implementação rigorosa de Injeção de Dependência para desacoplamento de interfaces e implementações.
+* **Service Lifetimes:** Gerenciamento estratégico de ciclos de vida:
+    * **Scoped:** Para Contextos de Banco de Dados (EF Core) e Repositórios, garantindo consistência por requisição.
+    * **Singleton:** Para serviços de configuração e cache global.
+    * **Transient:** Para lógica de mapeamento e utilitários leves.
 
 ---
 
-### 🔐 3. Autenticação e Segurança (JWT)
-* **Identity & JWT:** Fluxo completo de autenticação com emissão de tokens assinados e expiração configurável.
-* **Auth Guards (Angular):** Proteção de rotas no front-end, impedindo o acesso de usuários não autenticados a áreas sensíveis.
-* **Policy-Based Authorization:** Controle de acesso granular no back-end baseado em claims de usuário.
+### 📝 2. Observabilidade e Logging Estruturado
+* **Serilog Integration:** Substituição do log padrão por uma solução de logging estruturado.
+* **Sinks & Tracing:** Configuração de logs para console e arquivos rotativos, permitindo o rastreio de erros em tempo real e auditoria de operações financeiras.
+* **Contextual Logging:** Captura de metadados das requisições (User ID, Endpoint, Timestamp) para facilitar o debug em ambientes de produção.
 
 ---
 
-### 📊 4. Front-end Reativo com Angular 18
-* **Signals & Control Flow:** Implementação das novas APIs do Angular 18 para detecção de mudanças ultra-eficiente.
-* **Master-Detail Pattern:** Navegação fluida entre dashboard geral e detalhes específicos de ativos por portfólio.
-* **Interceptors:** Centralização da lógica de autenticação HTTP, anexando automaticamente tokens Bearer em cada request.
+### 🧪 3. Qualidade de Software e Testes (QA)
+* **Testes Unitários (xUnit):** Validação das regras de negócio no core da aplicação.
+* **Mocking Framework (Moq):** Simulação de dependências (Banco de Dados e APIs externas) para garantir a pureza dos testes de unidade.
+* **Testes de Integração:** Validação do fluxo completo entre Controllers e a camada de persistência.
 
 ---
 
-### 🛠️ 5. Persistência e Infraestrutura
-* **Entity Framework Core 9:** Uso de Migrations para versionamento de banco de dados e Fluent API para configurações complexas de esquema.
-* **SQL Server:** Armazenamento relacional robusto com integridade referencial garantida.
-* **Repository Pattern:** Abstração da camada de dados para facilitar testes e manter a lógica de persistência isolada.
+### 🔐 4. Segurança e Identidade (JWT)
+* **Bearer Authentication:** Implementação de JWT com chaves assimétricas para autorização segura.
+* **Middleware de Autenticação:** Pipeline customizado no .NET para validação de tokens em cada request.
+* **Angular Auth Guards:** Proteção de rotas no front-end e tratamento de expiração de token com redirecionamento automático.
+
+---
+
+### 📊 5. Front-end Reativo (Angular 18)
+* **Signals & Control Flow:** Aproveitamento máximo das novas funcionalidades do Angular 18 para uma UI extremamente fluida e sem gargalos de detecção de mudanças.
+* **HTTP Interceptors:** Centralização da lógica de segurança e tratamento global de erros de rede e logs de client-side.
+* **Tailwind Architecture:** Design System responsivo baseado em utilitários para um Dashboard Dark Mode consistente.
+
+---
+
+### 🛠️ 6. Persistência e Infraestrutura
+* **EF Core 9 (Fluent API):** Modelagem detalhada do banco de dados, incluindo índices, chaves estrangeiras e relacionamentos complexos.
+* **SQL Server:** Motor de banco de dados relacional para armazenamento seguro e transacional.
+* **Repository Pattern:** Camada de abstração que isola o acesso a dados da lógica de aplicação.
 
 ---
 
@@ -51,29 +60,30 @@ O projeto foi construído seguindo rigorosos padrões de engenharia de software,
 
 ### **Back-end**
 * **C# / .NET 9** (Runtime)
-* **xUnit & Moq** (Testing Stack)
-* **Entity Framework Core** (ORM)
+* **Serilog** (Structured Logging)
+* **xUnit / Moq** (Testing)
+* **Entity Framework Core 9** (ORM)
 * **SQL Server** (Database)
-* **Swagger / OpenAPI** (API Documentation)
 
 ### **Front-end**
 * **Angular 18** (Framework)
 * **TypeScript** (Language)
 * **Tailwind CSS** (Styling)
-* **RxJS** (Reactive Streams)
+* **RxJS** (Reactive Extensions)
 
 ---
 
 ## 🧠 Conceitos Principais Dominados
 
-* **Injeção de Dependência:** Configuração e resolução de dependências complexas no `Program.cs`.
-* **Clean Architecture:** Organização de código focada em domínio e independência de frameworks.
-* **TDD / Unit Testing:** Garantia de qualidade e prevenção de regressões em sistemas financeiros.
-* **Full Stack Integration:** Sincronia perfeita entre modelos C# e interfaces TypeScript.
-* **SQL Server Modeling:** Design de tabelas, relacionamentos 1:N e otimização de queries.
+* **Injeção de Dependência Profunda:** Configuração de contêineres de serviço e inversão de controle.
+* **Observabilidade:** Implementação de logs estruturados para monitoramento de saúde do sistema.
+* **Clean Architecture:** Organização de projetos em Domain, Application, Infrastructure e Web API.
+* **TDD (Test Driven Development):** Mentalidade focada em qualidade e cobertura de código.
+* **Segurança JWT:** Ciclo completo de vida do token (Issue, Validation, Interception).
+* **Gestão de Estado Reativo:** Uso de Signals para interfaces de alta performance.
 
 ---
 
 ## 🏁 Conclusão
 
-O **FinanceFlow** não é apenas um CRUD, mas um ecossistema financeiro completo que demonstra o domínio de tecnologias modernas e boas práticas de desenvolvimento. Desde a infraestrutura de testes até a reatividade do Angular 18, o projeto está pronto para ambientes de produção que exigem segurança, performance e código de alta qualidade.
+O **FinanceFlow** é o resultado de uma engenharia moderna, unindo a robustez do .NET 9 com a agilidade do Angular 18. O projeto não entrega apenas telas, mas uma infraestrutura completa com logs, testes e injeção de dependência, estando pronto para ser escalado e mantido em cenários reais de mercado financeiro.
